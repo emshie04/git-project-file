@@ -1,0 +1,153 @@
+<link rel="icon" type="image/png" href="libraux.png">
+<style>
+    /* --- FIXED YOUR HEADER --- */
+    header {
+        padding: 20px 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        /* Fixed to match your body's deep red theme */
+        background: rgba(26, 0, 0, 0.9); 
+        border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    header a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        margin-left: 20px;
+        transition: 0.3s;
+    }
+
+    header a:hover {
+        color: #f59e0b;
+    }
+
+    /* --- YOUR ORIGINAL BODY DESIGN --- */
+    body {
+        background: linear-gradient(to bottom, #3d0000, #1a0000);
+        color: white;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0px 0px 50px 0px; /* Adjusted to prevent header overlap */
+    }
+
+    .about-container {
+        max-width: 900px;
+        margin: 50px auto;
+        text-align: center;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 20px;
+        padding: 40px;
+    }
+
+    h1 { color: #f59e0b; font-size: 40px; margin-bottom: 10px; }
+
+    /* --- ADDED DESCRIPTION STYLING --- */
+    .project-description {
+        text-align: justify;
+        line-height: 1.8;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .member-card {
+        background: rgba(0,0,0,0.4);
+        padding: 25px;
+        border-radius: 15px;
+        border-top: 3px solid #f59e0b;
+        transition: 0.3s;
+    }
+
+    .member-card:hover { transform: translateY(-5px); background: rgba(0,0,0,0.6); }
+    .name { display: block; font-weight: bold; color: #f59e0b; font-size: 18px; }
+    .role { display: block; font-size: 12px; margin-bottom: 15px; opacity: 0.7; }
+    
+    .cv-btn {
+        text-decoration: none;
+        color: white;
+        background: transparent;
+        border: 1px solid #f59e0b;
+        padding: 5px 15px;
+        border-radius: 5px;
+        font-size: 12px;
+        transition: 0.3s;
+    }
+    .cv-btn:hover { background: #f59e0b; color: black; }
+</style>
+
+<header>
+    <div class="logo" style="font-weight: 900; font-size: 24px; color:orange;">LIBRAUX</div>
+    <nav>
+        <a href="Page3-Home.html">HOME</a>
+        <a href="Page5-Catalog.html">CATALOG</a>
+        <a href="Page4-Borrow.html">BORROW</a>
+        <a href="Page6-Duedate.html">MY LOANS</a>
+        <a href="Page8-Aboutus.html" style="color:gold;">ABOUT US</a>
+        <a href="Page7-Settings.html">SETTINGS</a>
+    </nav>
+    
+</header>
+
+<div class="about-container">
+    <div class="glass-card">
+        <h1>ABOUT LIBRAUX</h1>
+        
+        <!-- Added Project Description -->
+        <div class="project-description">
+            LIBRAUX is a digital library management system designed to streamline the process of monitoring, 
+            borrowing, and returning academic resources. The system features a centralized catalog and an 
+            automated tracking module to ensure efficient management of book due dates and inventory status. 
+            This project focuses on providing a functional yet aesthetically minimal interface tailored for 
+            IT students and faculty.
+        </div>
+
+        <div class="team-grid">
+            <div class="member-card">
+                <span class="name">Lalyn D. Lota</span>
+                <span class="role">Lead Developer & UI Designer(front-end)</span>
+                <a href="lalyn_Cv.html" class="cv-btn">VIEW CV</a>
+            </div>
+
+            <div class="member-card">
+                <span class="name">Gerby Gem M. Foracdas</span>
+                <span class="role">Database Administrator(backend)</span>
+                <a href="gerb_cv.html" class="cv-btn">VIEW CV</a>
+            </div>
+
+            <div class="member-card">
+                <span class="name">B-Joy F. Moaje</span>
+                <span class="role">Lead System Analyst</span>
+                <a href="joy_cv.html" class="cv-btn">VIEW CV</a>
+            </div>
+
+            <div class="member-card">
+                <span class="name">Justine Kyle M. Casero</span>
+                <span class="role">Technical Documentarist</span>
+                <a href="resume.html" class="cv-btn">VIEW CV</a>
+            </div>
+        </div>
+
+        <p style="margin-top: 40px; font-size: 12px; opacity: 0.5;">
+            BSIT 2 - Block 3 | Group 1 Project | Romblon State University
+        </p>
+    </div>
+</div>

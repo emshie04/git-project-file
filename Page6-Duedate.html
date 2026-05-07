@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LIBRAUX - My Loans</title>
+    <link rel="icon" type="image/png" href="libraux.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, rgb(61, 0, 0), rgb(41, 0, 0));
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 20px;
+        }
+
+        header a:hover { color: orange; }
+
+        .loans-container { padding: 40px 50px; max-width: 1000px; margin: 0 auto; }
+        h1 { color: gold; margin-bottom: 10px; }
+        
+        .loan-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 30px; 
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .loan-table th { background: rgba(153, 91, 11, 0.4); padding: 20px; text-align: left; color: gold; }
+        .loan-table td { padding: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+
+        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .status-on-time { background: #10b981; color: white; }
+        .status-overdue { background: #ef4444; color: white; }
+
+        .penalty-text { color: #ff9999; font-weight: bold; }
+
+        .return-btn { 
+            background: gold; 
+            color: black; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+        }
+
+        .empty-state { text-align: center; padding: 100px; opacity: 0.5; border: 2px dashed rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" style="font-weight: 900; font-size: 24px; color:orange;">LIBRAUX</div>
+        <nav>
+            <a href="Page3-Home.html">HOME</a>
+            <a href="Page5-Catalog.html">CATALOG</a>
+            <a href="Page4-Borrow.html">BORROW</a>
+            <a href="Page6-Duedate.html" style="color: gold;">MY LOANS</a>
+            <a href="Page8-Aboutus.html">ABOUT US</a>
+            <a href="Page7-Settings.html">SETTINGS</a>
+        </nav>
+    </header>
+
+    <div class="loans-container">
+        <h1><i class="fas fa-history"></i> My Active Loans</h1>
+        <p>Check your return dates and calculate late fees below.</p>
+
+        <div id="loanContent">
+            <table class="loan-table" id="loanTable">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Due Date</th>
+                        <th>Penalty Fee</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="loanBody"></tbody>
+            </table>
+            
+            <div id="noLoans" class="empty-state" style="display: none;">
+                <i class="fas fa-book-reader fa-3x"></i>
+                <p>No active loans. Keep on reading!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       function loadLoans() {
+    const borrowedList = JSON.parse(localStorage.getItem('borrowedList') || "[]");
+    const table = document.getElementById('loanTable');
+    const body = document.getElementById('loanBody');
+    const emptyState = document.getElementById('noLoans');
+
+    if (borrowedList.length === 0) {
+        table.style.display = "none";
+        emptyState.style.display = "block";
+        return;
+    }
+
+    table.style.display = "table";
+    emptyState.style.display = "none";
+    body.innerHTML = "";
+
+    // 1. Get Today's Date at Midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    borrowedList.forEach((book, index) => {
+        // 2. Correctly extract data
+        let title = (typeof book === 'object') ? book.title : book;
+        
+        // Use the saved date, or a past date if you want to FORCE a penalty for testing
+        let dueDateStr = (typeof book === 'object' && book.returnDate) ? book.returnDate : "2026-05-10"; 
+        
+        // 3. Robust Date Comparison
+        const dueDate = new Date(dueDateStr);
+        
+        // We compare milliseconds to ensure accuracy 
+        //checks if the book is overdue
+        const isOverdue = dueDate.getTime() < today.getTime();
+        
+        let penaltyDisplay = "None";
+        let statusClass = "status-on-time";
+        let statusText = "ON TIME";
+
+        if (isOverdue) {
+            // Calculate days late
+            const diffTime = today.getTime() - dueDate.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); //converts 
+            
+            const dailyFine = 15.00; 
+            const totalFine = diffDays * dailyFine;
+            
+            penaltyDisplay = `₱${totalFine.toFixed(2)}`;
+            statusClass = "status-overdue";
+            statusText = "OVERDUE";
+        }
+
+        // 4. Update the Row
+        const row = document.createElement('tr');
+        //penalty
+        row.innerHTML = `
+            <td><strong>${title}</strong></td>
+            <td>${dueDateStr}</td>
+            <td class="penalty-text" style="color: ${isOverdue ? '#ff9999' : '#fff'}">${penaltyDisplay}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td><button class="return-btn" onclick="returnBook(${index})">RETURN</button></td>
+        `;
+        body.appendChild(row);
+    });
+}
+
+function returnBook(index) {
+    let borrowedList = JSON.parse(localStorage.getItem('borrowedList') || "[]");
+    const bookTitle = typeof borrowedList[index] === 'object' ? borrowedList[index].title : borrowedList[index];
+    
+    borrowedList.splice(index, 1);
+    localStorage.setItem('borrowedList', JSON.stringify(borrowedList));
+    
+    alert(`Successfully returned: ${bookTitle}`);
+    loadLoans();
+}
+
+window.onload = loadLoans;
+    </script>
+</body>
+</html>

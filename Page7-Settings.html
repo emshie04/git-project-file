@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LIBRAUX - Settings</title>
+    <link rel="icon" type="image/png" href="libraux.png">
+    <link rel="stylesheet" href="External.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+         header {
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 20px;
+        }
+
+        header a:hover { color: orange; }
+        body { background-image: linear-gradient(to bottom, rgb(61, 0, 0), rgb(41, 0, 0)); color: white; }
+        .settings-wrapper { padding: 50px 20px; display: flex; justify-content: center; }
+        .settings-card { width: 350px; padding: 40px; text-align: center; background: rgba(255,255,255,0.1); border-radius: 20px; border: 1px solid gold; }
+        .profile-icon { font-size: 80px; color: orange; margin-bottom: 20px; }
+        .user-detail { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 10px 0; }
+        .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; color: white; }
+        .btn-logout { background: #555; }
+        .btn-reset { background: orange; }
+    </style>
+</head>
+<body>
+     <header>
+        <div class="logo" style="font-weight: 900; font-size: 24px; color:orange;">LIBRAUX</div>
+        <nav>
+            <a href="Page3-Home.html">HOME</a>
+            <a href="Page5-Catalog.html">CATALOG</a>
+            <a href="Page4-Borrow.html">BORROW</a>
+            <a href="Page6-Duedate.html" >MY LOANS</a>
+            <a href="Page8-Aboutus.html">ABOUT US</a>
+            <a href="Page7-Settings.html" style="color: gold;">SETTINGS</a>
+        </nav>
+    </header>
+    <div class="settings-wrapper">
+        <div class="settings-card">
+            <i class="fas fa-user-circle profile-icon"></i>
+            <h2>Account</h2>
+            
+            <div class="user-detail">
+                <small>USERNAME</small><br>
+                <strong id="stName">---</strong>
+            </div>
+
+            <div class="user-detail">
+                <small>BOOKS BORROWED</small><br>
+                <strong id="stLoans">0</strong>
+            </div>
+
+            <hr style="opacity: 0.2; margin: 20px 0;">
+
+            <!-- LOGOUT: Just leaves the account -->
+            <button class="btn btn-logout" onclick="goLogout()">LOGOUT</button>
+
+            <!-- RESET: Deletes all books -->
+            <button class="btn btn-reset" onclick="goReset()">RESET SYSTEM</button>
+            
+            <p style="font-size: 10px; opacity: 0.6; margin-top: 10px;">
+                Reset will delete your borrowed books list.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // 1. Show the Username
+            var name = localStorage.getItem('currentUser');
+            if (name == null) {
+                document.getElementById('stName').innerText = "Guest";
+            } else {
+                document.getElementById('stName').innerText = name;
+            }
+
+            // 2. Count the books
+            var data = localStorage.getItem('borrowedList');
+            if (data != null) {
+                var list = JSON.parse(data);
+                document.getElementById('stLoans').innerText = list.length;
+            }
+        };
+
+        // Function for Logout (Keeps the books in memory)
+        function goLogout() {
+            var answer = confirm("Are you sure you want to logout?");
+            if (answer == true) {
+                localStorage.removeItem('currentUser'); 
+                window.location.href = "Page2-Login.html";
+            }
+        }
+
+        // Function for Reset (Deletes the books too)
+        function goReset() {
+            var answer = confirm("Warning: This deletes all books! Continue?");
+            if (answer == true) {
+                localStorage.clear(); 
+                window.location.href = "Page1-Cover.html";
+            }
+        }
+    </script>
+</body>
+</html>
