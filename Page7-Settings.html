@@ -99,7 +99,7 @@
             var answer = confirm("Are you sure you want to logout?");
             if (answer == true) {
                 localStorage.removeItem('currentUser'); 
-                window.location.href = "Page2-Login.html";
+                window.location.href = "index.html";
             }
         }
 
@@ -108,7 +108,7 @@
             var answer = confirm("Warning: This deletes all books! Continue?");
             if (answer == true) {
                 localStorage.clear(); 
-                window.location.href = "Page1-Cover.html";
+                window.location.href = "index.html";
             }
         }
     </script>
